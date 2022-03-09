@@ -1,43 +1,49 @@
 h1 {
-	background-color: blue;
+  background-color: blue;
   text-align: center;
   margin: 10px 20px;
 }
-p
-{
+
+p {
   color: rgb(111, 195, 209);
-  text-align: right;      
+  text-align: right;
 }
-ul
-{
-  	font: 16px Verdana;  	
-    line-height: 2;
+
+ul {
+  font: 16px Verdana;
+  line-height: 2;
 }
-li, span{
+
+li, span {
   text-decoration: underline;
 }
-div p{
-  text-align:left;
+
+div p {
+  text-align: left;
 }
+
 #uniq {
   color: lightPink;
   padding-right: 30px;
 }
+
 li.awesome {
-  border: 1px solid blue; 
+  border: 1px solid blue;
 }
+
 a:hover {
-  text-decoration: none; 
+  text-decoration: none;
   background-color: #AFEEEE;
 }
-div.stack{ 
+
+div.stack {
   width: 100%;
-	height: 100%;
- 	background: url("https://pp.userapi.com/JfnmYEgk0dF4atzp2jeJs5r9RT0U_Oo0zdiFlA/pyyqNJ_LlPA.jpg") right no-repeat; 
+  height: 100%;
+  background: url("https://pp.userapi.com/JfnmYEgk0dF4atzp2jeJs5r9RT0U_Oo0zdiFlA/pyyqNJ_LlPA.jpg") right no-repeat;
   background-size: contain;
 }
 
-#myCanvas{
+#myCanvas {
   background: #eee;
   display: block;
   margin: 0 auto;
