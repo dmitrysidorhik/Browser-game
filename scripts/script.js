@@ -11,7 +11,10 @@ const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 
 const initialColor = '#0095DD';
-let ballColor, paddleColor  = initialColor;
+let ballColor  = initialColor;
+let paddleColor  = initialColor;
+console.log("ballColor " + ballColor);
+console.log("paddleColor " + paddleColor);
 
 const ballRadius = 10;
 
