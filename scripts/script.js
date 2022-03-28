@@ -9,14 +9,16 @@ let coordY = canvas.height - 30;
 const paddleHeight = 10;
 const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
-let myColor;
+
+const initialColor = '#0095DD';
+let ballColor, paddleColor  = initialColor;
 
 const ballRadius = 10;
 
 function drawBall() {
     ctx.beginPath();
     ctx.arc(coordX, coordY, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = myColor;
+    ctx.fillStyle = ballColor;
     ctx.fill();
     coordX += dx;
     coordY += dy;    
@@ -24,7 +26,7 @@ function drawBall() {
 }
 
 function changeColor() {
-    myColor = ctx.fillStyle = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    ballColor = ctx.fillStyle = "#" + Math.floor(Math.random() * 16777215).toString(16);
 }
 
 function draw() {
@@ -50,7 +52,7 @@ let timerId = setInterval(draw, 10);
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = paddleColor;
     ctx.fill();
     ctx.closePath();
 }
