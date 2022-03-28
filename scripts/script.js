@@ -11,12 +11,14 @@ const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 
 const initialColor = '#0095DD';
-let ballColor  = initialColor;
-let paddleColor  = initialColor;
-console.log("ballColor " + ballColor);
-console.log("paddleColor " + paddleColor);
+let ballColor = initialColor;
+let paddleColor = initialColor;
 
 const ballRadius = 10;
+let rightPressed = false;
+let leftPressed = false;
+
+
 
 function drawBall() {
     ctx.beginPath();
@@ -24,7 +26,7 @@ function drawBall() {
     ctx.fillStyle = ballColor;
     ctx.fill();
     coordX += dx;
-    coordY += dy;    
+    coordY += dy;
     ctx.closePath();
 }
 
@@ -50,7 +52,7 @@ function draw() {
     }
 }
 
-let timerId = setInterval(draw, 10);
+setInterval(draw, 10);
 
 function drawPaddle() {
     ctx.beginPath();
@@ -59,3 +61,25 @@ function drawPaddle() {
     ctx.fill();
     ctx.closePath();
 }
+
+const keyDownHandler = e => {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = true;
+    }
+    if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = true;
+    }
+};
+const keyUpHandler = e => { 
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = true;
+    }
+    if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = true;
+    }
+};
+
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+
+
