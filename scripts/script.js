@@ -6,8 +6,8 @@ let dy = -2;
 let coordX = canvas.width / 2;
 let coordY = canvas.height - 30;
 
-const paddleHeight = 10;
-const paddleWidth = 75;
+let paddleHeight = 10;
+let paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 
 const initialColor = '#0095DD';
@@ -18,7 +18,8 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-
+let upPressed = false;
+let downPressed = false;
 
 function drawBall() {
     ctx.beginPath();
@@ -40,16 +41,47 @@ function draw() {
     drawPaddle();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
-        console.log("dx " + dx);
-        console.log("dy " + dy);
+        // console.log("dx " + dx);
+        // console.log("dy " + dy);
         changeColor();
     }
     if (coordY + dy > canvas.height - ballRadius || coordY + dy < ballRadius) {
         dy = -dy;
-        console.log("dx " + dx);
-        console.log("dy " + dy);
+        // console.log("dx " + dx);
+        // console.log("dy " + dy);
         changeColor();
     }
+    if (rightPressed) {
+        console.log("rightPressed " + rightPressed);
+        paddleX += 7;
+        if (paddleX + paddleWidth > canvas.width) {
+            paddleX = canvas.width - paddleWidth;
+        }
+        rightPressed=false;
+    } 
+    if (leftPressed) {
+        console.log("leftPressed " + leftPressed);
+        paddleX -= 7;
+        if (paddleX < 0) {
+            paddleX = 0;
+        }
+        leftPressed=false;
+    }
+    if (upPressed) {
+        console.log("upPressed " + upPressed);
+        paddleWidth+=2;
+        paddleX--;
+        upPressed=false;
+
+    }
+    if (downPressed) {
+        paddleWidth-=2;
+        paddleX++;
+        console.log("downPressed " + downPressed);      
+        downPressed=false;
+
+    }
+
 }
 
 setInterval(draw, 10);
@@ -69,13 +101,25 @@ const keyDownHandler = e => {
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = true;
     }
+    if (e.key === 'Up' || e.key === 'ArrowUp') {
+        upPressed = true;
+    }
+    if (e.key === 'Down' || e.key === 'ArrowDown') {
+        downPressed = true;
+    }
 };
-const keyUpHandler = e => { 
+const keyUpHandler = e => {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = true;
     }
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = true;
+    }
+    if (e.key === 'Up' || e.key === 'ArrowUp') {
+        upPressed = true;
+    }
+    if (e.key === 'Down' || e.key === 'ArrowDown') {
+        downPressed = true;
     }
 };
 
