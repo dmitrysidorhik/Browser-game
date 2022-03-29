@@ -18,8 +18,6 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-
-
 function drawBall() {
     ctx.beginPath();
     ctx.arc(coordX, coordY, ballRadius, 0, Math.PI * 2);
@@ -40,15 +38,28 @@ function draw() {
     drawPaddle();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
-        console.log("dx " + dx);
-        console.log("dy " + dy);
         changeColor();
     }
     if (coordY + dy > canvas.height - ballRadius || coordY + dy < ballRadius) {
         dy = -dy;
-        console.log("dx " + dx);
-        console.log("dy " + dy);
         changeColor();
+    }
+    if (rightPressed) {
+        console.log("rightPressed " + rightPressed);
+        paddleX += 7;
+        if (paddleX + paddleWidth > canvas.width) {
+            paddleX = canvas.width - paddleWidth;
+        }
+        rightPressed = false;
+    }
+
+    if (leftPressed) {
+        console.log("leftPressed " + leftPressed);
+        paddleX -= 7;
+        if (paddleX < 0) {
+            paddleX = 0;
+        }
+        leftPressed = false;
     }
 }
 
@@ -70,16 +81,14 @@ const keyDownHandler = e => {
         leftPressed = true;
     }
 };
-const keyUpHandler = e => { 
-    if (e.key === 'Right' || e.key === 'ArrowRight') {
-        rightPressed = true;
-    }
-    if (e.key === 'Left' || e.key === 'ArrowLeft') {
-        leftPressed = true;
-    }
-};
+// const keyUpHandler = e => {
+//     if (e.key === 'Right' || e.key === 'ArrowRight') {
+//         rightPressed = true;
+//     }
+//     if (e.key === 'Left' || e.key === 'ArrowLeft') {
+//         leftPressed = true;
+//     }
+// };
 
 document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-
-
+//document.addEventListener('keyup', keyUpHandler, false);
