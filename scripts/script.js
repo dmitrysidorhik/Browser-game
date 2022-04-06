@@ -40,21 +40,25 @@ function draw() {
         dx = -dx;
         changeColor();
     }
-    if (coordY + dy > canvas.height - ballRadius) {
-        let repeat_game = confirm("Repeat?");
-        if (repeat_game) {
-            coordX = canvas.width / 2;
-            coordY = canvas.height - 30;
-            dx = 2;
-            dy = -2;
-        } else {
-            alert('GAME OVER');
-            clearInterval(interval);
-        }
-    }
     if (coordY + dy < ballRadius) {
         dy = -dy;
         changeColor();
+    }
+    if (coordY + dy > canvas.height - ballRadius) {
+        if (coordX > paddleX && coordX < paddleX + paddleWidth) {
+            dy = -dy;
+        } else {
+            let repeat_game = confirm("Repeat?");
+            if (repeat_game) {
+                coordX = canvas.width / 2;
+                coordY = canvas.height - 30;
+                dx = 2;
+                dy = -2;
+            } else {
+                alert('GAME OVER');
+                clearInterval(interval);
+            }
+        }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;
