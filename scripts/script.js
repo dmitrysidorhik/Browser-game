@@ -40,7 +40,19 @@ function draw() {
         dx = -dx;
         changeColor();
     }
-    if (coordY + dy > canvas.height - ballRadius || coordY + dy < ballRadius) {
+    if (coordY + dy > canvas.height - ballRadius) {
+        let repeat_game = confirm("Repeat?");
+        if (repeat_game) {
+            coordX = canvas.width / 2;
+            coordY = canvas.height - 30;
+            dx = 2;
+            dy = -2;
+        } else {
+            alert('GAME OVER');
+            clearInterval(interval);
+        }
+    }
+    if (coordY + dy < ballRadius) {
         dy = -dy;
         changeColor();
     }
@@ -54,7 +66,7 @@ function draw() {
     }
 }
 
-setInterval(draw, 10);
+let interval = setInterval(draw, 10);
 
 function drawPaddle() {
     ctx.beginPath();
