@@ -44,21 +44,12 @@ function draw() {
         dy = -dy;
         changeColor();
     }
-    if (rightPressed) {
-        console.log("rightPressed " + rightPressed);
+    if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;
-        if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-        }
         rightPressed = false;
     }
-
-    if (leftPressed) {
-        console.log("leftPressed " + leftPressed);
+    if (leftPressed && paddleX > 0) {
         paddleX -= 7;
-        if (paddleX < 0) {
-            paddleX = 0;
-        }
         leftPressed = false;
     }
 }
