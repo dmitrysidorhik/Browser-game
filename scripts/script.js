@@ -48,8 +48,8 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            let repeat_game = confirm("Repeat?");
-            if (repeat_game) {
+            let restartGame = confirm("Restart?");
+            if (restartGame) {
                 coordX = canvas.width / 2;
                 coordY = canvas.height - 30;
                 dx = 2;
