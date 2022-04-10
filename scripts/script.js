@@ -48,9 +48,22 @@ const drawBricks = () => {
             ctx.closePath();
         }
     }
-}
+};
 
-
+const collisionDetection = () => {
+    for (let i = 0; i < brickColumnCount; i++) {
+        for (let j = 0; j < brickRowCount; j++) {
+            let brick = bricks[i][j];
+            if (coordX > brick.x
+                && coordX < brick.x + brickWidth
+                && coordY > brick.y
+                && coordY < brick.y + brickHeight
+            ) {
+                dy = -dy;
+            }
+        }
+    }
+};
 
 function drawBall() {
     ctx.beginPath();
@@ -71,6 +84,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
+    collisionDetection();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
