@@ -30,17 +30,20 @@ const bricks = [];
 for (let i = 0; i < brickColumnCount; i++) {
     bricks[i] = [];
     for (let j = 0; j < brickRowCount; j++) {
-        bricks[i][j] = { x: 0, y: 0 };
+        bricks[i][j] = { x: 0, y: 0, status: 1 };
     }
 }
 
 const drawBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
-        for (let j = 0; j < brickRowCount; j++) {
+        for (let j = 0; j < brickRowCount; j++) {  
+            if (bricks[i][j].status === 0) {
+                continue;
+            }          
             const brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
             const brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
             bricks[i][j].x = brickX;
-            bricks[i][j].y = brickY;
+            bricks[i][j].y = brickY;            
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
             ctx.fillStyle = "#17e3be";
@@ -53,13 +56,17 @@ const drawBricks = () => {
 const collisionDetection = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         for (let j = 0; j < brickRowCount; j++) {
-            let brick = bricks[i][j];
+            const brick = bricks[i][j];
+            if (brick.status === 0) {
+                continue;
+            } 
             if (coordX > brick.x
                 && coordX < brick.x + brickWidth
                 && coordY > brick.y
                 && coordY < brick.y + brickHeight
             ) {
                 dy = -dy;
+                brick.status = 0;
             }
         }
     }
@@ -70,8 +77,6 @@ function drawBall() {
     ctx.arc(coordX, coordY, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = ballColor;
     ctx.fill();
-    coordX += dx;
-    coordY += dy;
     ctx.closePath();
 }
 
@@ -103,6 +108,8 @@ function draw() {
                 coordY = canvas.height - 30;
                 dx = 2;
                 dy = -2;
+                rightPressed = false;
+                leftPressed = false;
             } else {
                 alert('GAME OVER');
                 clearInterval(interval);
@@ -110,13 +117,13 @@ function draw() {
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-        rightPressed = false;
-    }
-    if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-        leftPressed = false;
-    }
+        paddleX += 5;
+     }
+    else if (leftPressed && paddleX > 0) {
+        paddleX -= 5;
+     }
+    coordX+=dx;
+    coordY+=dy;
 }
 
 let interval = setInterval(draw, 10);
@@ -137,14 +144,14 @@ const keyDownHandler = e => {
         leftPressed = true;
     }
 };
-// const keyUpHandler = e => {
-//     if (e.key === 'Right' || e.key === 'ArrowRight') {
-//         rightPressed = true;
-//     }
-//     if (e.key === 'Left' || e.key === 'ArrowLeft') {
-//         leftPressed = true;
-//     }
-// };
+const keyUpHandler = e => {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = false;
+    }
+    if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = false;
+    }
+};
 
 document.addEventListener('keydown', keyDownHandler, false);
-//document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
