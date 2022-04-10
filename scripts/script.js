@@ -34,6 +34,24 @@ for (let i = 0; i < brickColumnCount; i++) {
     }
 }
 
+const drawBricks = () => {
+    for (let i = 0; i < brickColumnCount; i++) {
+        for (let j = 0; j < brickRowCount; j++) {
+            const brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
+            const brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
+            bricks[i][j].x = brickX;
+            bricks[i][j].y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            ctx.fillStyle = "#17e3be";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
+}
+
+
+
 function drawBall() {
     ctx.beginPath();
     ctx.arc(coordX, coordY, ballRadius, 0, Math.PI * 2);
@@ -50,6 +68,7 @@ function changeColor() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
     drawBall();
     drawPaddle();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
