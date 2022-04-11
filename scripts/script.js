@@ -26,6 +26,8 @@ const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 
+let score = 0;
+
 const bricks = [];
 for (let i = 0; i < brickColumnCount; i++) {
     bricks[i] = [];
@@ -34,16 +36,23 @@ for (let i = 0; i < brickColumnCount; i++) {
     }
 }
 
+const drawScore = () => {
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#ffbc12';
+    ctx.fillText(`Score: ${score}`, 8, 20);
+}
+
+
 const drawBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
-        for (let j = 0; j < brickRowCount; j++) {  
+        for (let j = 0; j < brickRowCount; j++) {
             if (bricks[i][j].status === 0) {
                 continue;
-            }          
+            }
             const brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
             const brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
             bricks[i][j].x = brickX;
-            bricks[i][j].y = brickY;            
+            bricks[i][j].y = brickY;
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
             ctx.fillStyle = "#17e3be";
@@ -59,7 +68,7 @@ const collisionDetection = () => {
             const brick = bricks[i][j];
             if (brick.status === 0) {
                 continue;
-            } 
+            }
             if (coordX > brick.x
                 && coordX < brick.x + brickWidth
                 && coordY > brick.y
@@ -67,6 +76,7 @@ const collisionDetection = () => {
             ) {
                 dy = -dy;
                 brick.status = 0;
+                score++;
             }
         }
     }
@@ -89,6 +99,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
+    drawScore();
     collisionDetection();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
@@ -118,12 +129,12 @@ function draw() {
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 5;
-     }
+    }
     else if (leftPressed && paddleX > 0) {
         paddleX -= 5;
-     }
-    coordX+=dx;
-    coordY+=dy;
+    }
+    coordX += dx;
+    coordY += dy;
 }
 
 let interval = setInterval(draw, 10);
