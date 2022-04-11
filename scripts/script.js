@@ -113,16 +113,21 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
+            alert('GAME OVER');
             let restartGame = confirm("Restart?");
             if (restartGame) {
                 coordX = canvas.width / 2;
                 coordY = canvas.height - 30;
                 dx = 2;
                 dy = -2;
-                rightPressed = false;
-                leftPressed = false;
+                score = 0;
+                for (let i = 0; i < brickColumnCount; i++) {
+                    bricks[i] = [];
+                    for (let j = 0; j < brickRowCount; j++) {
+                        bricks[i][j] = { x: 0, y: 0, status: 1 };
+                    }
+                }
             } else {
-                alert('GAME OVER');
                 clearInterval(interval);
             }
         }
@@ -136,8 +141,6 @@ function draw() {
     coordX += dx;
     coordY += dy;
 }
-
-let interval = setInterval(draw, 10);
 
 function drawPaddle() {
     ctx.beginPath();
@@ -166,3 +169,5 @@ const keyUpHandler = e => {
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
+
+let interval = setInterval(draw, 10);
