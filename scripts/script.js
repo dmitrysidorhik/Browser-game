@@ -77,6 +77,10 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
+                if(score === brickRowCount * brickColumnCount) {
+                    alert('YOU WIN, CONGRATULATIONS!', 'success');         
+                    clearInterval(interval);
+                  }
             }
         }
     }
@@ -122,7 +126,7 @@ function draw() {
                 rightPressed = false;
                 leftPressed = false;
             } else {
-                alert('GAME OVER');
+                alert('GAME OVER','danger');
                 clearInterval(interval);
             }
         }
@@ -137,7 +141,12 @@ function draw() {
     coordY += dy;
 }
 
-let interval = setInterval(draw, 10);
+const alert = (message, type) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+  
+    alertPlaceholder.append(wrapper);
+};
 
 function drawPaddle() {
     ctx.beginPath();
@@ -166,3 +175,5 @@ const keyUpHandler = e => {
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
+
+let interval = setInterval(draw, 10);
