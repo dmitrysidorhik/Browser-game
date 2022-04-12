@@ -28,6 +28,25 @@ const brickOffsetLeft = 30;
 
 let score = 0;
 
+const initVariable = () => {
+    dx = 2;
+    dy = -2;
+    coordX = canvas.width / 2;
+    coordY = canvas.height - 30;
+    score = 0;
+    rightPressed = false;
+    leftPressed = false;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    for (let i = 0; i < brickColumnCount; i++) {
+        bricks[i] = [];
+        for (let j = 0; j < brickRowCount; j++) {
+            bricks[i][j] = { x: 0, y: 0, status: 1 };
+        }
+    }
+}
+
+
+
 const bricks = [];
 for (let i = 0; i < brickColumnCount; i++) {
     bricks[i] = [];
@@ -116,21 +135,26 @@ function draw() {
             alert('GAME OVER');
             let restartGame = confirm("Restart?");
             if (restartGame) {
-                coordX = canvas.width / 2;
-                coordY = canvas.height - 30;
-                dx = 2;
-                dy = -2;
-                score = 0;
-                rightPressed = false;
-                leftPressed = false;
-                paddleX = (canvas.width - paddleWidth) / 2;
+                initVariable();
+                // clearInterval(interval);
+                // document.location.reload();
 
-                for (let i = 0; i < brickColumnCount; i++) {
-                    bricks[i] = [];
-                    for (let j = 0; j < brickRowCount; j++) {
-                        bricks[i][j] = { x: 0, y: 0, status: 1 };
-                    }
-                }
+                // coordX = canvas.width / 2;
+                // coordY = canvas.height - 30;
+                // dx = 2;
+                // dy = -2;
+                // score = 0;
+                // rightPressed = false;
+                // leftPressed = false;
+                // paddleX = (canvas.width - paddleWidth) / 2;                
+                // for (let i = 0; i < brickColumnCount; i++) {
+                //     bricks[i] = [];
+                //     for (let j = 0; j < brickRowCount; j++) {
+                //         bricks[i][j] = { x: 0, y: 0, status: 1 };
+                //     }
+                // }
+                // clearInterval(interval);
+                // interval = setInterval(draw, 10);
             } else {
                 clearInterval(interval);
             }
