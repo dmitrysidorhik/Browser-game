@@ -37,6 +37,11 @@ const initVariable = () => {
     rightPressed = false;
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
+    arrayBricks();
+}
+
+const bricks = [];
+const arrayBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         bricks[i] = [];
         for (let j = 0; j < brickRowCount; j++) {
@@ -45,22 +50,11 @@ const initVariable = () => {
     }
 }
 
-
-
-const bricks = [];
-for (let i = 0; i < brickColumnCount; i++) {
-    bricks[i] = [];
-    for (let j = 0; j < brickRowCount; j++) {
-        bricks[i][j] = { x: 0, y: 0, status: 1 };
-    }
-}
-
 const drawScore = () => {
     ctx.font = '16px Arial';
     ctx.fillStyle = '#ffbc12';
     ctx.fillText(`Score: ${score}`, 8, 20);
 }
-
 
 const drawBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
@@ -136,25 +130,6 @@ function draw() {
             let restartGame = confirm("Restart?");
             if (restartGame) {
                 initVariable();
-                // clearInterval(interval);
-                // document.location.reload();
-
-                // coordX = canvas.width / 2;
-                // coordY = canvas.height - 30;
-                // dx = 2;
-                // dy = -2;
-                // score = 0;
-                // rightPressed = false;
-                // leftPressed = false;
-                // paddleX = (canvas.width - paddleWidth) / 2;                
-                // for (let i = 0; i < brickColumnCount; i++) {
-                //     bricks[i] = [];
-                //     for (let j = 0; j < brickRowCount; j++) {
-                //         bricks[i][j] = { x: 0, y: 0, status: 1 };
-                //     }
-                // }
-                // clearInterval(interval);
-                // interval = setInterval(draw, 10);
             } else {
                 clearInterval(interval);
             }
@@ -196,5 +171,7 @@ const keyUpHandler = e => {
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
+
+arrayBricks();
 
 let interval = setInterval(draw, 10);
