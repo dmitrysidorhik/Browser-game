@@ -69,10 +69,10 @@ const collisionDetection = () => {
             if (brick.status === 0) {
                 continue;
             }
-            if (coordX > brick.x
-                && coordX < brick.x + brickWidth
-                && coordY > brick.y
-                && coordY < brick.y + brickHeight
+            if (coordX > brick.x &&
+                coordX < brick.x + brickWidth &&
+                coordY > brick.y &&
+                coordY < brick.y + brickHeight
             ) {
                 dy = -dy;
                 brick.status = 0;
@@ -121,6 +121,10 @@ function draw() {
                 dx = 2;
                 dy = -2;
                 score = 0;
+                rightPressed = false;
+                leftPressed = false;
+                paddleX = (canvas.width - paddleWidth) / 2;
+
                 for (let i = 0; i < brickColumnCount; i++) {
                     bricks[i] = [];
                     for (let j = 0; j < brickRowCount; j++) {
@@ -134,8 +138,7 @@ function draw() {
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 5;
-    }
-    else if (leftPressed && paddleX > 0) {
+    } else if (leftPressed && paddleX > 0) {
         paddleX -= 5;
     }
     coordX += dx;
