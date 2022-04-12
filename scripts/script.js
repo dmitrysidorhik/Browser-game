@@ -28,6 +28,10 @@ const brickOffsetLeft = 30;
 
 let score = 0;
 
+const bricks = [];
+
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
 const initVariable = () => {
     dx = 2;
     dy = -2;
@@ -40,7 +44,6 @@ const initVariable = () => {
     arrayBricks();
 }
 
-const bricks = [];
 const arrayBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         bricks[i] = [];
@@ -90,6 +93,10 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
+                if(score === brickRowCount * brickColumnCount) {
+                    alert('YOU WIN, CONGRATULATIONS!', 'success');         
+                    clearInterval(interval);
+                  }
             }
         }
     }
@@ -126,7 +133,7 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            alert('GAME OVER');
+            alert('GAME OVER','danger');
             let restartGame = confirm("Restart?");
             if (restartGame) {
                 initVariable();
@@ -167,6 +174,13 @@ const keyUpHandler = e => {
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = false;
     }
+};
+
+const alert = (message, type) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+    alertPlaceholder.append(wrapper);
 };
 
 document.addEventListener('keydown', keyDownHandler, false);
