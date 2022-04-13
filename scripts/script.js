@@ -26,17 +26,42 @@ const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 
+let score = 0;
+
+const initVariable = () => {
+    dx = 2;
+    dy = -2;
+    coordX = canvas.width / 2;
+    coordY = canvas.height - 30;
+    score = 0;
+    rightPressed = false;
+    leftPressed = false;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    arrayBricks();
+}
+
 const bricks = [];
-for (let i = 0; i < brickColumnCount; i++) {
-    bricks[i] = [];
-    for (let j = 0; j < brickRowCount; j++) {
-        bricks[i][j] = { x: 0, y: 0 };
+const arrayBricks = () => {
+    for (let i = 0; i < brickColumnCount; i++) {
+        bricks[i] = [];
+        for (let j = 0; j < brickRowCount; j++) {
+            bricks[i][j] = { x: 0, y: 0, status: 1 };
+        }
     }
+}
+
+const drawScore = () => {
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#ffbc12';
+    ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
 const drawBricks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         for (let j = 0; j < brickRowCount; j++) {
+            if (bricks[i][j].status === 0) {
+                continue;
+            }
             const brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
             const brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
             bricks[i][j].x = brickX;
@@ -53,13 +78,18 @@ const drawBricks = () => {
 const collisionDetection = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         for (let j = 0; j < brickRowCount; j++) {
-            let brick = bricks[i][j];
-            if (coordX > brick.x
-                && coordX < brick.x + brickWidth
-                && coordY > brick.y
-                && coordY < brick.y + brickHeight
+            const brick = bricks[i][j];
+            if (brick.status === 0) {
+                continue;
+            }
+            if (coordX > brick.x &&
+                coordX < brick.x + brickWidth &&
+                coordY > brick.y &&
+                coordY < brick.y + brickHeight
             ) {
                 dy = -dy;
+                brick.status = 0;
+                score++;
             }
         }
     }
@@ -70,8 +100,6 @@ function drawBall() {
     ctx.arc(coordX, coordY, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = ballColor;
     ctx.fill();
-    coordX += dx;
-    coordY += dy;
     ctx.closePath();
 }
 
@@ -84,6 +112,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
+    drawScore();
     collisionDetection();
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
@@ -97,29 +126,23 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
+            alert('GAME OVER');
             let restartGame = confirm("Restart?");
             if (restartGame) {
-                coordX = canvas.width / 2;
-                coordY = canvas.height - 30;
-                dx = 2;
-                dy = -2;
+                initVariable();
             } else {
-                alert('GAME OVER');
                 clearInterval(interval);
             }
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-        rightPressed = false;
+        paddleX += 5;
+    } else if (leftPressed && paddleX > 0) {
+        paddleX -= 5;
     }
-    if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-        leftPressed = false;
-    }
+    coordX += dx;
+    coordY += dy;
 }
-
-let interval = setInterval(draw, 10);
 
 function drawPaddle() {
     ctx.beginPath();
@@ -137,14 +160,18 @@ const keyDownHandler = e => {
         leftPressed = true;
     }
 };
-// const keyUpHandler = e => {
-//     if (e.key === 'Right' || e.key === 'ArrowRight') {
-//         rightPressed = true;
-//     }
-//     if (e.key === 'Left' || e.key === 'ArrowLeft') {
-//         leftPressed = true;
-//     }
-// };
+const keyUpHandler = e => {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = false;
+    }
+    if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = false;
+    }
+};
 
 document.addEventListener('keydown', keyDownHandler, false);
-//document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+
+arrayBricks();
+
+let interval = setInterval(draw, 10);
