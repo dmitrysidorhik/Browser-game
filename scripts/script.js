@@ -41,10 +41,10 @@ const initVariable = () => {
     rightPressed = false;
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
-    arrayBricks();
+    drawBlocks();
 }
 
-const arrayBricks = () => {
+const drawBlocks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         bricks[i] = [];
         for (let j = 0; j < brickRowCount; j++) {
@@ -186,6 +186,6 @@ const alert = (message, type) => {
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 
-arrayBricks();
+drawBlocks();
 
 let interval = setInterval(draw, 10);
