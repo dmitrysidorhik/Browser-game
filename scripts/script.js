@@ -93,10 +93,10 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
-                if(score === brickRowCount * brickColumnCount) {
-                    alert('YOU WIN, CONGRATULATIONS!', 'success');         
+                if (score === brickRowCount * brickColumnCount) {
+                    alert('YOU WIN, CONGRATULATIONS!', 'success');
                     clearInterval(interval);
-                  }
+                }
             }
         }
     }
@@ -121,6 +121,7 @@ function draw() {
     drawPaddle();
     drawScore();
     collisionDetection();
+
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
@@ -133,8 +134,10 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            alert('GAME OVER','danger');
-            let restartGame = confirm("Restart?");
+            // myAlert.remove();
+            alert('GAME OVER', 'danger');
+
+            let restartGame = 0;
             if (restartGame) {
                 initVariable();
             } else {
@@ -178,10 +181,19 @@ const keyUpHandler = e => {
 
 const alert = (message, type) => {
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-
+    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert" id="modAlert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     alertPlaceholder.append(wrapper);
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+    let myAlert = document.getElementById("modAlert");
+    myAlert.addEventListener("closed.bs.alert", function() {
+        alert("Alert message box has been closed.", "danger");
+        interval = setInterval(draw, 1);
+
+    });
+});
+
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
@@ -189,3 +201,4 @@ document.addEventListener('keyup', keyUpHandler, false);
 drawBlocks();
 
 let interval = setInterval(draw, 10);
+alert("GAME START", "info");
