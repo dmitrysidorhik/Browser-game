@@ -32,6 +32,7 @@ const bricks = [];
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 
+
 const initVariable = () => {
     dx = 2;
     dy = -2;
@@ -134,12 +135,20 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            // myAlert.remove();
-            alert('GAME OVER', 'danger');
-
-            let restartGame = 0;
+            alert("GAME OVER", "danger");
+            clearInterval(interval);
+            alertPlaceholder.addEventListener("close.bs.alert", function () {
+                // interval = setInterval(draw, 10);
+                restartGame = 1;
+                // alertInfo("GAME START", "info");
+                alert("RESTART GAME???", "warning");
+            });
+            // let restartGame = 1;
             if (restartGame) {
                 initVariable();
+                interval = setInterval(draw, 10);
+                // alertInfo("GAME START", "info");
+                // alertDom.remove();
             } else {
                 clearInterval(interval);
             }
@@ -181,19 +190,17 @@ const keyUpHandler = e => {
 
 const alert = (message, type) => {
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert" id="modAlert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    if (type === "danger") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    }
+    if (type === "info") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+    }
+    if (type === "warning") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+    }
     alertPlaceholder.append(wrapper);
 };
-
-document.addEventListener("DOMContentLoaded", function() {
-    let myAlert = document.getElementById("modAlert");
-    myAlert.addEventListener("closed.bs.alert", function() {
-        alert("Alert message box has been closed.", "danger");
-        interval = setInterval(draw, 1);
-
-    });
-});
-
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
@@ -201,4 +208,11 @@ document.addEventListener('keyup', keyUpHandler, false);
 drawBlocks();
 
 let interval = setInterval(draw, 10);
+
 alert("GAME START", "info");
+
+let alertInfoDom = document.querySelector(".alert-info");
+let alertDangerDom = document.querySelector(".alert-danger");
+let alertwarningDom = document.querySelector(".alert-warning");
+
+setTimeout(() => alertInfoDom.remove(), 1000);
