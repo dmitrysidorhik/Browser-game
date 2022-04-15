@@ -31,6 +31,8 @@ let score = 0;
 const bricks = [];
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+const buttonPlaceholder = document.getElementById('liveButtonPlaceholder');
+
 
 
 const initVariable = () => {
@@ -142,6 +144,7 @@ function draw() {
                 restartGame = 1;
                 // alertInfo("GAME START", "info");
                 alert("RESTART GAME???", "warning");
+                goOn();
             });
             // let restartGame = 1;
             if (restartGame) {
@@ -201,6 +204,14 @@ const alert = (message, type) => {
     }
     alertPlaceholder.append(wrapper);
 };
+
+const goOn = () => {
+    const wrapper = document.createElement('div');       
+    wrapper.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center"><button class="btn btn-success" type="button">Continue</button><button class="btn btn-secondary" type="button">Stop</button></div>'
+    alertPlaceholder.append(wrapper);
+};
+
+
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
