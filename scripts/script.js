@@ -140,13 +140,12 @@ function draw() {
             alert("GAME OVER", "danger");
             clearInterval(interval);
             alertPlaceholder.addEventListener("close.bs.alert", function () {
-                // interval = setInterval(draw, 10);
                 restartGame = 1;
-                // alertInfo("GAME START", "info");
                 alert("RESTART GAME???", "warning");
                 goOn();
             });
             // let restartGame = 1;
+
             if (restartGame) {
                 initVariable();
                 interval = setInterval(draw, 10);
@@ -154,6 +153,7 @@ function draw() {
                 // alertDom.remove();
             } else {
                 clearInterval(interval);
+
             }
         }
     }
@@ -207,7 +207,7 @@ const alert = (message, type) => {
 
 const goOn = () => {
     const wrapper = document.createElement('div');       
-    wrapper.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center"><button class="btn btn-success" type="button">Continue</button><button class="btn btn-secondary" type="button">Stop</button></div>'
+    wrapper.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center"><button class="btn btn-success" type="button">Continue</button><button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
     alertPlaceholder.append(wrapper);
 };
 
@@ -227,3 +227,4 @@ let alertDangerDom = document.querySelector(".alert-danger");
 let alertwarningDom = document.querySelector(".alert-warning");
 
 setTimeout(() => alertInfoDom.remove(), 1000);
+
