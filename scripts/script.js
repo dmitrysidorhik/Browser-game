@@ -18,8 +18,8 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 1;
-const brickColumnCount = 2;
+const brickRowCount = 2;
+const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
@@ -227,11 +227,19 @@ const doRestart = () => {
     initVariable();
 };
 
+const mouseMoveHandler = e => {
+    const relativeX = e.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth/2;
+    }
+  };
+
 alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
 setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 
 drawBlocks();
 
