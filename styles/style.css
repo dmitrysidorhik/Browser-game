@@ -48,3 +48,11 @@ div.stack {
   display: block;
   margin: 0 auto;
 }
+
+.alert {
+  text-align: center;
+}
+
+.btn {
+  margin-bottom: 10px;
+}

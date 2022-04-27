@@ -25,10 +25,20 @@ const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
+let countClassElem = 0;
 
 let score = 0;
 
+const bricks = [];
+
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+const buttonPlaceholder = document.getElementById('liveButtonPlaceholder');
+
+const wrapper = document.createElement('div');
+
+
 const initVariable = () => {
+    // setTimeout(() => document.getElementsByClassName('alert-info')[countClassElem++].style = "display: none", 1000);
     dx = 2;
     dy = -2;
     coordX = canvas.width / 2;
@@ -37,11 +47,11 @@ const initVariable = () => {
     rightPressed = false;
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
-    arrayBricks();
+    drawBlocks();
+    interval = setInterval(draw, 10);
 }
 
-const bricks = [];
-const arrayBricks = () => {
+const drawBlocks = () => {
     for (let i = 0; i < brickColumnCount; i++) {
         bricks[i] = [];
         for (let j = 0; j < brickRowCount; j++) {
@@ -90,6 +100,10 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
+                if (score === brickRowCount * brickColumnCount) {
+                    alert('YOU WIN, CONGRATULATIONS!', 'success');
+                    clearInterval(interval);
+                }
             }
         }
     }
@@ -114,6 +128,7 @@ function draw() {
     drawPaddle();
     drawScore();
     collisionDetection();
+
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
@@ -126,13 +141,9 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            alert('GAME OVER');
-            let restartGame = confirm("Restart?");
-            if (restartGame) {
-                initVariable();
-            } else {
-                clearInterval(interval);
-            }
+            alert("GAME OVER", "danger");
+            clearInterval(interval);
+            alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -160,6 +171,7 @@ const keyDownHandler = e => {
         leftPressed = true;
     }
 };
+
 const keyUpHandler = e => {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = false;
@@ -169,9 +181,63 @@ const keyUpHandler = e => {
     }
 };
 
+const alert = (message, type) => {
+    // const wrapper = document.createElement('div');
+    if (type === "danger") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    }
+    if (type === "info") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+    }
+    if (type === "warning") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+    }
+    alertPlaceholder.append(wrapper);
+};
+    const wrapperBtn = document.createElement('div');
+
+const goOn = () => {
+    alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
+    alert("RESTART GAME???", "warning");
+    // const wrapper = document.createElement('div');
+    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+        // '<div class="alert alert-warning alert-dismissible" role="alert">Restart</div>' +
+        '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
+        '<button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
+    buttonPlaceholder.append(wrapperBtn);
+};
+
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 
-arrayBricks();
+drawBlocks();
 
 let interval = setInterval(draw, 10);
+
+let gameCount = 0;
+alert(`GAME START ${gameCount++}`, "info");
+setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+
+let alertInfoDom = document.querySelector(".alert-info");
+let alertDangerDom = document.querySelector(".alert-danger");
+let alertWarningDom = document.querySelector(".alert-warning");
+
+let buttonSecondaryDom = document.querySelector(".btn-secondary");
+let buttonSuccessDom = document.querySelector(".btn-success");
+
+// let countClassElemRestart = 0;
+const doRestart = () => {
+    // alertWarningDom.remove();
+    alert(`GAME START ${gameCount++}`, "info");
+    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    // document.getElementsByClassName('alert-warning')[countClassElemRestart].style = "display: none";
+    // document.getElementsByClassName('btn-secondary')[countClassElemRestart].style = "display: none";
+    // document.getElementsByClassName('btn-success')[countClassElemRestart].style = "display: none";
+    // countClassElemRestart;
+    initVariable();
+};
+
+
