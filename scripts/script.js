@@ -18,8 +18,8 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 3;
-const brickColumnCount = 5;
+const brickRowCount = 1;
+const brickColumnCount = 2;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
@@ -28,6 +28,9 @@ const brickOffsetLeft = 30;
 let countClassElem = 0;
 
 let score = 0;
+let gameCountWin = 0;
+let gameCountLose = 0;
+
 
 const bricks = [];
 
@@ -35,10 +38,15 @@ const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 const buttonPlaceholder = document.getElementById('liveButtonPlaceholder');
 
 const wrapper = document.createElement('div');
+const wrapperBtn = document.createElement('div');
 
+let alertInfoDom = document.querySelector(".alert-info");
+let alertDangerDom = document.querySelector(".alert-danger");
+let alertWarningDom = document.querySelector(".alert-warning");
+let buttonSecondaryDom = document.querySelector(".btn-secondary");
+let buttonSuccessDom = document.querySelector(".btn-success");
 
 const initVariable = () => {
-    // setTimeout(() => document.getElementsByClassName('alert-info')[countClassElem++].style = "display: none", 1000);
     dx = 2;
     dy = -2;
     coordX = canvas.width / 2;
@@ -101,8 +109,10 @@ const collisionDetection = () => {
                 brick.status = 0;
                 score++;
                 if (score === brickRowCount * brickColumnCount) {
-                    alert('YOU WIN, CONGRATULATIONS!', 'success');
+                    alert("YOU WIN, CONGRATULATIONS!", "success");
+                    gameCountWin++;
                     clearInterval(interval);
+                    alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
                 }
             }
         }
@@ -143,6 +153,7 @@ function draw() {
         } else {
             alert("GAME OVER", "danger");
             clearInterval(interval);
+            gameCountLose++;
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
@@ -182,8 +193,11 @@ const keyUpHandler = e => {
 };
 
 const alert = (message, type) => {
-    // const wrapper = document.createElement('div');
     if (type === "danger") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    }
+    if (type === "success") {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     }
@@ -195,18 +209,26 @@ const alert = (message, type) => {
     }
     alertPlaceholder.append(wrapper);
 };
-    const wrapperBtn = document.createElement('div');
 
 const goOn = () => {
     alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
     alert("RESTART GAME???", "warning");
-    // const wrapper = document.createElement('div');
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
-        // '<div class="alert alert-warning alert-dismissible" role="alert">Restart</div>' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
     buttonPlaceholder.append(wrapperBtn);
 };
+
+const doRestart = () => {
+    alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    initVariable();
+};
+
+alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
@@ -215,29 +237,10 @@ drawBlocks();
 
 let interval = setInterval(draw, 10);
 
-let gameCount = 0;
-alert(`GAME START ${gameCount++}`, "info");
-setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
-let alertInfoDom = document.querySelector(".alert-info");
-let alertDangerDom = document.querySelector(".alert-danger");
-let alertWarningDom = document.querySelector(".alert-warning");
 
-let buttonSecondaryDom = document.querySelector(".btn-secondary");
-let buttonSuccessDom = document.querySelector(".btn-success");
 
-// let countClassElemRestart = 0;
-const doRestart = () => {
-    // alertWarningDom.remove();
-    alert(`GAME START ${gameCount++}`, "info");
-    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-    document.getElementsByClassName('btn-success')[0].style = "display: none";
-    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
-    // document.getElementsByClassName('alert-warning')[countClassElemRestart].style = "display: none";
-    // document.getElementsByClassName('btn-secondary')[countClassElemRestart].style = "display: none";
-    // document.getElementsByClassName('btn-success')[countClassElemRestart].style = "display: none";
-    // countClassElemRestart;
-    initVariable();
-};
+
+
 
 
