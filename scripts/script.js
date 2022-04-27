@@ -34,8 +34,11 @@ const bricks = [];
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 const buttonPlaceholder = document.getElementById('liveButtonPlaceholder');
 
+const wrapper = document.createElement('div');
+
+
 const initVariable = () => {
-    setTimeout(() => document.getElementsByClassName('alert-info')[countClassElem++].style = "display: none", 1000);
+    // setTimeout(() => document.getElementsByClassName('alert-info')[countClassElem++].style = "display: none", 1000);
     dx = 2;
     dy = -2;
     coordX = canvas.width / 2;
@@ -118,7 +121,6 @@ function changeColor() {
     ballColor = ctx.fillStyle = "#" + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-let test = 0;
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
@@ -141,15 +143,7 @@ function draw() {
         } else {
             alert("GAME OVER", "danger");
             clearInterval(interval);
-            //////////////////////////////////////////////////////////////
-            // console.log(++test);
-
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
-            // function sart()
-            // {
-            //     console.log(++test);
-            //     goOn();
-            // }
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -188,7 +182,7 @@ const keyUpHandler = e => {
 };
 
 const alert = (message, type) => {
-    const wrapper = document.createElement('div');
+    // const wrapper = document.createElement('div');
     if (type === "danger") {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
@@ -201,16 +195,17 @@ const alert = (message, type) => {
     }
     alertPlaceholder.append(wrapper);
 };
+    const wrapperBtn = document.createElement('div');
 
 const goOn = () => {
-    alertPlaceholder.removeEventListener("close.bs.alert",goOn, false);///////////////
-
+    alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
     alert("RESTART GAME???", "warning");
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+    // const wrapper = document.createElement('div');
+    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+        // '<div class="alert alert-warning alert-dismissible" role="alert">Restart</div>' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
-    buttonPlaceholder.append(wrapper);
+    buttonPlaceholder.append(wrapperBtn);
 };
 
 document.addEventListener('keydown', keyDownHandler, false);
@@ -220,7 +215,9 @@ drawBlocks();
 
 let interval = setInterval(draw, 10);
 
-alert("GAME START", "info");
+let gameCount = 0;
+alert(`GAME START ${gameCount++}`, "info");
+setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
 let alertInfoDom = document.querySelector(".alert-info");
 let alertDangerDom = document.querySelector(".alert-danger");
@@ -229,15 +226,18 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let countClassElemRestart=0;
+// let countClassElemRestart = 0;
 const doRestart = () => {
     // alertWarningDom.remove();
-    alert("GAME START", "info");
-    document.getElementsByClassName('alert-warning')[countClassElemRestart].style = "display: none";
-    document.getElementsByClassName('btn-secondary')[countClassElemRestart].style = "display: none";
-    document.getElementsByClassName('btn-success')[countClassElemRestart].style = "display: none";
-    countClassElemRestart++;
+    alert(`GAME START ${gameCount++}`, "info");
+    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    // document.getElementsByClassName('alert-warning')[countClassElemRestart].style = "display: none";
+    // document.getElementsByClassName('btn-secondary')[countClassElemRestart].style = "display: none";
+    // document.getElementsByClassName('btn-success')[countClassElemRestart].style = "display: none";
+    // countClassElemRestart;
     initVariable();
 };
 
-setTimeout(() => alertInfoDom.remove(), 1000);
+
