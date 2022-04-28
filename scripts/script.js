@@ -46,12 +46,16 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
+let lives = 3;
+
+
 const initVariable = () => {
     dx = 2;
     dy = -2;
     coordX = canvas.width / 2;
     coordY = canvas.height - 30;
     score = 0;
+    lives = 3;
     rightPressed = false;
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
@@ -68,10 +72,11 @@ const drawBlocks = () => {
     }
 }
 
-const drawScore = () => {
+const drawInfo = (message, coord) => {
+    const { x, y } = coord;
     ctx.font = '16px Arial';
     ctx.fillStyle = '#ffbc12';
-    ctx.fillText(`Score: ${score}`, 8, 20);
+    ctx.fillText(message, x, y);
 }
 
 const drawBricks = () => {
@@ -136,7 +141,8 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
-    drawScore();
+    drawInfo(`Score: ${score}`, { x: 8, y: 20 });
+    drawInfo(`Lives: ${lives}`, { x: canvas.width - 65, y: 20 });
     collisionDetection();
 
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
@@ -151,8 +157,17 @@ function draw() {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
         } else {
-            alert("GAME OVER", "danger");
-            clearInterval(interval);
+            lives--;
+            if (!lives) {
+                alert("GAME OVER", "danger");
+                clearInterval(interval);
+            } else {
+                coordX = canvas.width / 2;
+                coordY = canvas.height - 30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width - paddleWidth) / 2;
+            }
             gameCountLose++;
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
@@ -202,10 +217,12 @@ const alert = (message, type) => {
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     }
     if (type === "info") {
-        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
+        '</div>'
     }
     if (type === "warning") {
-        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message; '</div>'
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
+        '</div>'
     }
     alertPlaceholder.append(wrapper);
 };
@@ -230,9 +247,9 @@ const doRestart = () => {
 const mouseMoveHandler = e => {
     const relativeX = e.clientX - canvas.offsetLeft;
     if (relativeX > 0 && relativeX < canvas.width) {
-      paddleX = relativeX - paddleWidth/2;
+        paddleX = relativeX - paddleWidth / 2;
     }
-  };
+};
 
 alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
 setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
@@ -244,11 +261,3 @@ document.addEventListener('mousemove', mouseMoveHandler, false);
 drawBlocks();
 
 let interval = setInterval(draw, 10);
-
-
-
-
-
-
-
-
