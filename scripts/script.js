@@ -1,3 +1,5 @@
+////////////////////-------INITIALIZATION---VARIABLE-----//////////////////////////////////
+
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -18,7 +20,7 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 2;
+const brickRowCount = 3;
 const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
@@ -30,7 +32,6 @@ let countClassElem = 0;
 let score = 0;
 let gameCountWin = 0;
 let gameCountLose = 0;
-
 
 const bricks = [];
 
@@ -47,7 +48,11 @@ let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
 let lives = 3;
+let start = false;
 
+let interval;
+
+////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
     dx = 2;
@@ -60,7 +65,6 @@ const initVariable = () => {
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
     drawBlocks();
-    interval = setInterval(draw, 10);
 }
 
 const drawBlocks = () => {
@@ -160,6 +164,7 @@ function draw() {
             lives--;
             if (!lives) {
                 alert("GAME OVER", "danger");
+                gameCountLose++;
                 clearInterval(interval);
             } else {
                 coordX = canvas.width / 2;
@@ -168,7 +173,6 @@ function draw() {
                 dy = -2;
                 paddleX = (canvas.width - paddleWidth) / 2;
             }
-            gameCountLose++;
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
@@ -189,6 +193,8 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+////////////////////-------CONTROL--------//////////////////////////////////
+
 const keyDownHandler = e => {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = true;
@@ -206,6 +212,20 @@ const keyUpHandler = e => {
         leftPressed = false;
     }
 };
+
+const mouseMoveHandler = e => {
+    const relativeX = e.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+};
+
+
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
+
+////////////////////-------OUTPUT---------//////////////////////////////////
 
 const alert = (message, type) => {
     if (type === "danger") {
@@ -227,37 +247,40 @@ const alert = (message, type) => {
     alertPlaceholder.append(wrapper);
 };
 
+
+////////////////////-------START/RESTART---------//////////////////////////////////
+
 const goOn = () => {
-    alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
     alert("RESTART GAME???", "warning");
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
-        '<button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
+        '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
     buttonPlaceholder.append(wrapperBtn);
 };
 
 const doRestart = () => {
-    alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    doStart();
+};
+
+const doStart = () => {
+    drawBlocks();
+    if (!start) {
+        alert("GAME START!!!", "info");
+    } else {
+        alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+    }
+    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    start = true;
+    interval = setInterval(draw, 10);
     initVariable();
 };
 
-const mouseMoveHandler = e => {
-    const relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-    }
+const goStop = () => {
+    alert("STOP", "warning");
 };
 
-alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+////////////////////-------RUN---------//////////////////////////////////
 
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-document.addEventListener('mousemove', mouseMoveHandler, false);
-
-drawBlocks();
-
-let interval = setInterval(draw, 10);
+doStart();
