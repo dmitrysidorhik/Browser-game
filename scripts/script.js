@@ -1,3 +1,5 @@
+////////////////////-------INITIALIZATION---VARIABLE-----//////////////////////////////////
+
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -31,7 +33,6 @@ let score = 0;
 let gameCountWin = 0;
 let gameCountLose = 0;
 
-
 const bricks = [];
 
 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
@@ -47,7 +48,11 @@ let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
 let lives = 3;
+let start = false;
 
+////////////////////-------INITIALIZATION---VARIABLE---END--//////////////////////////////////
+
+////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
     dx = 2;
@@ -160,6 +165,7 @@ function draw() {
             lives--;
             if (!lives) {
                 alert("GAME OVER", "danger");
+                gameCountLose++;
                 clearInterval(interval);
             } else {
                 coordX = canvas.width / 2;
@@ -168,7 +174,6 @@ function draw() {
                 dy = -2;
                 paddleX = (canvas.width - paddleWidth) / 2;
             }
-            gameCountLose++;
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
@@ -189,6 +194,8 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+////////////////////-------CONTROL--------//////////////////////////////////
+
 const keyDownHandler = e => {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = true;
@@ -206,6 +213,16 @@ const keyUpHandler = e => {
         leftPressed = false;
     }
 };
+
+const mouseMoveHandler = e => {
+    const relativeX = e.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+};
+////////////////////-------CONTROL--END---------//////////////////////////////////
+
+
 
 const alert = (message, type) => {
     if (type === "danger") {
@@ -237,22 +254,36 @@ const goOn = () => {
 };
 
 const doRestart = () => {
-    alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    doStart();
+    // alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+    // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     initVariable();
 };
 
-const mouseMoveHandler = e => {
-    const relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-    }
-};
 
-alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+
+const doStart = () => {
+    if (!start) {
+        alert("GAME START!!!", "info");
+    }
+    else {
+        alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+    }
+    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+
+    // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    // document.getElementsByClassName('btn-success')[0].style = "display: none";
+    // document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    // initVariable();
+
+    start = true;
+
+};
+doStart();
+//alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+// setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
