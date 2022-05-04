@@ -3,8 +3,8 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-let dx = 2;
-let dy = -2;
+let dx;
+let dy;
 let coordX = canvas.width / 2;
 let coordY = canvas.height - 30;
 
@@ -52,13 +52,15 @@ let start = false;
 
 let interval;
 
+let statusBal = false;
+
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
-    dx = 2;
-    dy = -2;
+    dx = 0;
+    dy = 0;
     coordX = canvas.width / 2;
-    coordY = canvas.height - 30;
+    coordY = canvas.height - 20;
     score = 0;
     lives = 3;
     rightPressed = false;
@@ -149,6 +151,11 @@ function draw() {
     drawInfo(`Lives: ${lives}`, { x: canvas.width - 65, y: 20 });
     collisionDetection();
 
+    if (!statusBal) {
+        coordX = paddleX + paddleWidth / 2;
+        console.log(paddleX);
+    }
+
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
@@ -160,6 +167,7 @@ function draw() {
     if (coordY + dy > canvas.height - ballRadius) {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
+
         } else {
             lives--;
             if (!lives) {
@@ -167,11 +175,11 @@ function draw() {
                 gameCountLose++;
                 clearInterval(interval);
             } else {
-                coordX = canvas.width / 2;
-                coordY = canvas.height - 30;
-                dx = 2;
-                dy = -2;
-                paddleX = (canvas.width - paddleWidth) / 2;
+                statusBal = false;
+                coordY = canvas.height - 20;
+                coordX = paddleX + paddleWidth / 2;
+                dx = 0;
+                dy = 0;
             }
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
@@ -181,8 +189,11 @@ function draw() {
     } else if (leftPressed && paddleX > 0) {
         paddleX -= 5;
     }
-    coordX += dx;
-    coordY += dy;
+    if (statusBal) {
+        coordX += dx;
+        coordY += dy;
+    }
+
 }
 
 function drawPaddle() {
@@ -220,10 +231,21 @@ const mouseMoveHandler = e => {
     }
 };
 
+const mouseClickHandler = () => {
+    if (!statusBal) {
+        dx = (gameCountWin + 2);
+        dy = -(gameCountWin + 2);
+    }
+    statusBal = true;
+
+};
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
+
+document.addEventListener('mousedown', mouseClickHandler, false);
+
 
 ////////////////////-------OUTPUT---------//////////////////////////////////
 
@@ -262,6 +284,8 @@ const doRestart = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     doStart();
+    statusBal = false;
+
 };
 
 const doStart = () => {
@@ -272,9 +296,9 @@ const doStart = () => {
         alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
     }
     setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-    start = true;
     interval = setInterval(draw, 10);
     initVariable();
+    start = true;
 };
 
 const goStop = () => {
