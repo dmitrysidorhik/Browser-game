@@ -65,7 +65,6 @@ const initVariable = () => {
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
     drawBlocks();
-    interval = setInterval(draw, 10);
 }
 
 const drawBlocks = () => {
@@ -220,6 +219,11 @@ const mouseMoveHandler = e => {
         paddleX = relativeX - paddleWidth / 2;
     }
 };
+
+
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 ////////////////////-------CONTROL--END---------//////////////////////////////////
 
 
@@ -245,7 +249,7 @@ const alert = (message, type) => {
 };
 
 const goOn = () => {
-    alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
+    // alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
     alert("RESTART GAME???", "warning");
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
@@ -254,41 +258,41 @@ const goOn = () => {
 };
 
 const doRestart = () => {
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     doStart();
     // alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
     // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-    document.getElementsByClassName('btn-success')[0].style = "display: none";
-    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
-    initVariable();
+
 };
 
 
-
+let interval;
 const doStart = () => {
+    drawBlocks();
     if (!start) {
         alert("GAME START!!!", "info");
-    }
-    else {
+    } else {
         alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
     }
     setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    start = true;
+    interval = setInterval(draw, 10);
+    initVariable();
+
 
     // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
     // document.getElementsByClassName('btn-success')[0].style = "display: none";
     // document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     // initVariable();
 
-    start = true;
+
 
 };
-doStart();
+
 //alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
 // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
 
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-document.addEventListener('mousemove', mouseMoveHandler, false);
 
-drawBlocks();
 
-let interval = setInterval(draw, 10);
+doStart();
