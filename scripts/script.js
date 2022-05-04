@@ -20,7 +20,7 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 2;
+const brickRowCount = 3;
 const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
@@ -50,7 +50,7 @@ let buttonSuccessDom = document.querySelector(".btn-success");
 let lives = 3;
 let start = false;
 
-////////////////////-------INITIALIZATION---VARIABLE---END--//////////////////////////////////
+let interval;
 
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
@@ -224,9 +224,8 @@ const mouseMoveHandler = e => {
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
-////////////////////-------CONTROL--END---------//////////////////////////////////
 
-
+////////////////////-------OUTPUT---------//////////////////////////////////
 
 const alert = (message, type) => {
     if (type === "danger") {
@@ -248,12 +247,14 @@ const alert = (message, type) => {
     alertPlaceholder.append(wrapper);
 };
 
+
+////////////////////-------START/RESTART---------//////////////////////////////////
+
 const goOn = () => {
-    // alertPlaceholder.removeEventListener("close.bs.alert", goOn, false);
     alert("RESTART GAME???", "warning");
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
-        '<button class="btn btn-secondary" type="button" onclick="window.close()";>Stop</button></div>'
+        '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
     buttonPlaceholder.append(wrapperBtn);
 };
 
@@ -261,13 +262,8 @@ const doRestart = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     doStart();
-    // alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-    // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-
 };
 
-
-let interval;
 const doStart = () => {
     drawBlocks();
     if (!start) {
@@ -279,20 +275,12 @@ const doStart = () => {
     start = true;
     interval = setInterval(draw, 10);
     initVariable();
-
-
-    // setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-    // document.getElementsByClassName('btn-success')[0].style = "display: none";
-    // document.getElementsByClassName('btn-secondary')[0].style = "display: none";
-    // initVariable();
-
-
-
 };
 
-//alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
-// setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+const goStop = () => {
+    alert("STOP", "warning");
+};
 
-
+////////////////////-------RUN---------//////////////////////////////////
 
 doStart();
