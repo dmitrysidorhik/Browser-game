@@ -47,7 +47,8 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives = 3;
+let lives = 10;
+let level = 0;
 let start = false;
 
 let interval;
@@ -122,6 +123,7 @@ const collisionDetection = () => {
                 if (score === brickRowCount * brickColumnCount) {
                     alert("YOU WIN, CONGRATULATIONS!", "success");
                     gameCountWin++;
+                    level = gameCountWin;
                     clearInterval(interval);
                     alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
                 }
@@ -149,6 +151,8 @@ function draw() {
     drawPaddle();
     drawInfo(`Score: ${score}`, { x: 8, y: 20 });
     drawInfo(`Lives: ${lives}`, { x: canvas.width - 65, y: 20 });
+    drawInfo(`Level: ${level}`, { x: canvas.width / 2 - 30, y: 20 });
+
     collisionDetection();
 
     if (!statusBal) {
