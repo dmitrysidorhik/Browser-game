@@ -20,8 +20,8 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 3;
-const brickColumnCount = 5;
+const brickRowCount = 1;
+const brickColumnCount = 2;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
@@ -30,6 +30,7 @@ const brickOffsetLeft = 30;
 let countClassElem = 0;
 
 let score = 0;
+let fullScore = 0;
 let gameCountWin = 0;
 let gameCountLose = 0;
 
@@ -47,13 +48,17 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives = 10;
-let level = 0;
+let lives;
+let level = 1;
 let start = false;
 
 let interval;
 
 let statusBal = false;
+
+let fullTime = new Date();
+let fullTimeEnd;
+
 
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
@@ -63,7 +68,7 @@ const initVariable = () => {
     coordX = canvas.width / 2;
     coordY = canvas.height - 20;
     score = 0;
-    lives = 3;
+    lives = 1;
     rightPressed = false;
     leftPressed = false;
     paddleX = (canvas.width - paddleWidth) / 2;
@@ -82,7 +87,7 @@ const drawBlocks = () => {
 const drawInfo = (message, coord) => {
     const { x, y } = coord;
     ctx.font = '16px Arial';
-    ctx.fillStyle = '#ffbc12';
+    ctx.fillStyle = '155,122,111';
     ctx.fillText(message, x, y);
 }
 
@@ -120,12 +125,14 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
+                fullScore++;
                 if (score === brickRowCount * brickColumnCount) {
                     alert("YOU WIN, CONGRATULATIONS!", "success");
                     gameCountWin++;
-                    level = gameCountWin;
+                    level = gameCountWin + 1;
                     clearInterval(interval);
-                    alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
+                    alertPlaceholder.addEventListener("close.bs.alert", goNextLevel, true);
+
                 }
             }
         }
@@ -157,7 +164,7 @@ function draw() {
 
     if (!statusBal) {
         coordX = paddleX + paddleWidth / 2;
-        console.log(paddleX);
+        // console.log(paddleX);
     }
 
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
@@ -178,6 +185,8 @@ function draw() {
                 alert("GAME OVER", "danger");
                 gameCountLose++;
                 clearInterval(interval);
+                alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
+
             } else {
                 statusBal = false;
                 coordY = canvas.height - 20;
@@ -185,7 +194,7 @@ function draw() {
                 dx = 0;
                 dy = 0;
             }
-            alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
+            //alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -270,6 +279,14 @@ const alert = (message, type) => {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
         '</div>'
     }
+    if (type === "secondary") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
+        '</div>'
+    }
+    if (type === "dark") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
+        '</div>'
+    }
     alertPlaceholder.append(wrapper);
 };
 
@@ -289,7 +306,14 @@ const doRestart = () => {
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     doStart();
     statusBal = false;
+};
 
+const goNextLevel = () => {
+    alert("RESUME GAME???", "secondary");
+    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+        '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
+        '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
+    buttonPlaceholder.append(wrapperBtn);
 };
 
 const doStart = () => {
@@ -306,7 +330,12 @@ const doStart = () => {
 };
 
 const goStop = () => {
-    alert("STOP", "warning");
+    fullTimeEnd = new Date();
+    alert("STOP", "dark");
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    drawInfo(`Full score: ${fullScore}`, { x: canvas.width / 2 - 40, y: canvas.height / 2 });
+    drawInfo(`Full time: ${(fullTimeEnd-fullTime)/1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
 };
 
 ////////////////////-------RUN---------//////////////////////////////////
