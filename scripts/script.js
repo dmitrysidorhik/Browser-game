@@ -20,8 +20,8 @@ const ballRadius = 10;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 1;
-const brickColumnCount = 2;
+const brickRowCount = 3;
+const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
@@ -48,13 +48,13 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives;
-let level = 1;
+let lives = 5;
+let level = 2;
 let start = false;
 
 let interval;
 
-let statusBal = false;
+let statusBall = false;
 
 let fullTime = new Date();
 let fullTimeEnd;
@@ -64,15 +64,20 @@ let statusGame;
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
+    if (statusGame === "win") {
+
+    }
+    if (statusGame === "lose") {
+        lives = 5;
+        paddleX = (canvas.width - paddleWidth) / 2;
+    }
     dx = 0;
     dy = 0;
     coordX = canvas.width / 2;
     coordY = canvas.height - 20;
     score = 0;
-    lives = 2;
     rightPressed = false;
     leftPressed = false;
-    paddleX = (canvas.width - paddleWidth) / 2;
     drawBlocks();
 }
 
@@ -128,12 +133,10 @@ const collisionDetection = () => {
                 score++;
                 fullScore++;
                 if (score === brickRowCount * brickColumnCount) {
-                    alert("YOU WIN, CONGRATULATIONS!", "success");
-                    gameCountWin++;
                     level++;
                     statusGame = "win";
                     clearInterval(interval);
-                    alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
+                    doStart();
                 }
             }
         }
@@ -159,14 +162,12 @@ function draw() {
     drawPaddle();
     drawInfo(`Score: ${score}`, { x: 8, y: 20 });
     drawInfo(`Lives: ${lives}`, { x: canvas.width - 65, y: 20 });
-    drawInfo(`Level: ${level}`, { x: canvas.width / 2 - 30, y: 20 });
 
     collisionDetection();
 
-    if (!statusBal) {
+    if (!statusBall) {
         coordX = paddleX + paddleWidth / 2;
     }
-
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
@@ -178,7 +179,6 @@ function draw() {
     if (coordY + dy > canvas.height - ballRadius) {
         if (coordX > paddleX && coordX < paddleX + paddleWidth) {
             dy = -dy;
-
         } else {
             lives--;
             if (!lives) {
@@ -187,7 +187,7 @@ function draw() {
                 clearInterval(interval);
                 statusGame = "lose";
             } else {
-                statusBal = false;
+                statusBall = false;
                 coordY = canvas.height - 20;
                 coordX = paddleX + paddleWidth / 2;
                 dx = 0;
@@ -197,11 +197,11 @@ function draw() {
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 5;
+        paddleX += (level + 3);
     } else if (leftPressed && paddleX > 0) {
-        paddleX -= 5;
+        paddleX -= (level + 3);
     }
-    if (statusBal) {
+    if (statusBall) {
         coordX += dx;
         coordY += dy;
     }
@@ -226,11 +226,11 @@ const keyDownHandler = e => {
         leftPressed = true;
     }
     if (e.key === 'Up' || e.key === 'ArrowUp') {
-        if (!statusBal) {
+        if (!statusBall) {
             dx = (level + 1);
             dy = -(level + 1);
         }
-        statusBal = true;
+        statusBall = true;
     }
 };
 
@@ -243,21 +243,19 @@ const keyUpHandler = e => {
     }
 };
 
-
-
 const mouseMoveHandler = e => {
     const relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
+    if (relativeX > paddleWidth && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth;
     }
 };
 
 const mouseClickHandler = () => {
-    if (!statusBal) {
-        dx = (level + 1);
-        dy = -(level + 1);
+    if (!statusBall) {
+        dx = level;
+        dy = -level;
     }
-    statusBal = true;
+    statusBall = true;
 };
 
 
@@ -275,19 +273,11 @@ const alert = (message, type) => {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     }
-    if (type === "success") {
-        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-    }
     if (type === "info") {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
         '</div>'
     }
     if (type === "warning") {
-        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
-        '</div>'
-    }
-    if (type === "secondary") {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
         '</div>'
     }
@@ -304,11 +294,9 @@ const alert = (message, type) => {
 const goOn = () => {
     if (statusGame === "lose") {
         alert("RESTART GAME???", "warning");
-        level = 1;
+        level = 2;
     }
-    if (statusGame === "win") {
-        alert("RESUME GAME???", "secondary");
-    }
+
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
@@ -319,14 +307,15 @@ const doRestart = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     doStart();
-    statusBal = false;
 };
 
 const doStart = () => {
+    statusBall = false;
+
     if (!start) {
-        alert("GAME START!!!", "info");
+        alert(`NEW GAME!!! LEVEL: ${level-1}`, "info");
     } else {
-        alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+        alert(`LEVEL: ${level-1} `, "info");
     }
     setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
     interval = setInterval(draw, 10);
@@ -343,7 +332,6 @@ const goStop = () => {
     drawInfo(`Full time: ${(fullTimeEnd-fullTime)/1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
 
 };
-
 
 ////////////////////-------RUN---------//////////////////////////////////
 
