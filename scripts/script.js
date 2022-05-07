@@ -225,6 +225,13 @@ const keyDownHandler = e => {
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = true;
     }
+    if (e.key === 'Up' || e.key === 'ArrowUp') {
+        if (!statusBal) {
+            dx = (level + 1);
+            dy = -(level + 1);
+        }
+        statusBal = true;
+    }
 };
 
 const keyUpHandler = e => {
@@ -235,6 +242,8 @@ const keyUpHandler = e => {
         leftPressed = false;
     }
 };
+
+
 
 const mouseMoveHandler = e => {
     const relativeX = e.clientX - canvas.offsetLeft;
@@ -249,8 +258,8 @@ const mouseClickHandler = () => {
         dy = -(level + 1);
     }
     statusBal = true;
-
 };
+
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
