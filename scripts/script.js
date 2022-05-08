@@ -227,8 +227,8 @@ const keyDownHandler = e => {
     }
     if (e.key === 'Up' || e.key === 'ArrowUp') {
         if (!statusBall) {
-            dx = (level + 1);
-            dy = -(level + 1);
+            dx = level;
+            dy = -level;
         }
         statusBall = true;
     }
