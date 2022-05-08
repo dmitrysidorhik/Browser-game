@@ -3,8 +3,8 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-let dx = 2;
-let dy = -2;
+let dx;
+let dy;
 let coordX = canvas.width / 2;
 let coordY = canvas.height - 30;
 
@@ -30,6 +30,7 @@ const brickOffsetLeft = 30;
 let countClassElem = 0;
 
 let score = 0;
+let fullScore = 0;
 let gameCountWin = 0;
 let gameCountLose = 0;
 
@@ -47,23 +48,36 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives = 3;
+let lives = 5;
+let level = 2;
 let start = false;
 
 let interval;
 
+let statusBall = false;
+
+let fullTime = new Date();
+let fullTimeEnd;
+
+let statusGame;
+
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
-    dx = 2;
-    dy = -2;
+    if (statusGame === "win") {
+
+    }
+    if (statusGame === "lose") {
+        lives = 5;
+        paddleX = (canvas.width - paddleWidth) / 2;
+    }
+    dx = 0;
+    dy = 0;
     coordX = canvas.width / 2;
-    coordY = canvas.height - 30;
+    coordY = canvas.height - 20;
     score = 0;
-    lives = 3;
     rightPressed = false;
     leftPressed = false;
-    paddleX = (canvas.width - paddleWidth) / 2;
     drawBlocks();
 }
 
@@ -79,7 +93,7 @@ const drawBlocks = () => {
 const drawInfo = (message, coord) => {
     const { x, y } = coord;
     ctx.font = '16px Arial';
-    ctx.fillStyle = '#ffbc12';
+    ctx.fillStyle = '155,122,111';
     ctx.fillText(message, x, y);
 }
 
@@ -117,11 +131,12 @@ const collisionDetection = () => {
                 dy = -dy;
                 brick.status = 0;
                 score++;
+                fullScore++;
                 if (score === brickRowCount * brickColumnCount) {
-                    alert("YOU WIN, CONGRATULATIONS!", "success");
-                    gameCountWin++;
+                    level++;
+                    statusGame = "win";
                     clearInterval(interval);
-                    alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
+                    doStart();
                 }
             }
         }
@@ -147,8 +162,12 @@ function draw() {
     drawPaddle();
     drawInfo(`Score: ${score}`, { x: 8, y: 20 });
     drawInfo(`Lives: ${lives}`, { x: canvas.width - 65, y: 20 });
+
     collisionDetection();
 
+    if (!statusBall) {
+        coordX = paddleX + paddleWidth / 2;
+    }
     if (coordX + dx > canvas.width - ballRadius || coordX + dx < ballRadius) {
         dx = -dx;
         changeColor();
@@ -166,23 +185,27 @@ function draw() {
                 alert("GAME OVER", "danger");
                 gameCountLose++;
                 clearInterval(interval);
+                statusGame = "lose";
             } else {
-                coordX = canvas.width / 2;
-                coordY = canvas.height - 30;
-                dx = 2;
-                dy = -2;
-                paddleX = (canvas.width - paddleWidth) / 2;
+                statusBall = false;
+                coordY = canvas.height - 20;
+                coordX = paddleX + paddleWidth / 2;
+                dx = 0;
+                dy = 0;
             }
             alertPlaceholder.addEventListener("close.bs.alert", goOn, false);
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 5;
+        paddleX += (level + 3);
     } else if (leftPressed && paddleX > 0) {
-        paddleX -= 5;
+        paddleX -= (level + 3);
     }
-    coordX += dx;
-    coordY += dy;
+    if (statusBall) {
+        coordX += dx;
+        coordY += dy;
+    }
+
 }
 
 function drawPaddle() {
@@ -202,6 +225,13 @@ const keyDownHandler = e => {
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = true;
     }
+    if (e.key === 'Up' || e.key === 'ArrowUp') {
+        if (!statusBall) {
+            dx = level;
+            dy = -level;
+        }
+        statusBall = true;
+    }
 };
 
 const keyUpHandler = e => {
@@ -215,9 +245,17 @@ const keyUpHandler = e => {
 
 const mouseMoveHandler = e => {
     const relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
+    if (relativeX > paddleWidth && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth;
     }
+};
+
+const mouseClickHandler = () => {
+    if (!statusBall) {
+        dx = level;
+        dy = -level;
+    }
+    statusBall = true;
 };
 
 
@@ -225,14 +263,13 @@ document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
+document.addEventListener('mousedown', mouseClickHandler, false);
+
+
 ////////////////////-------OUTPUT---------//////////////////////////////////
 
 const alert = (message, type) => {
     if (type === "danger") {
-        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-    }
-    if (type === "success") {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message +
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     }
@@ -244,6 +281,10 @@ const alert = (message, type) => {
         wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
         '</div>'
     }
+    if (type === "dark") {
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message;
+        '</div>'
+    }
     alertPlaceholder.append(wrapper);
 };
 
@@ -251,7 +292,11 @@ const alert = (message, type) => {
 ////////////////////-------START/RESTART---------//////////////////////////////////
 
 const goOn = () => {
-    alert("RESTART GAME???", "warning");
+    if (statusGame === "lose") {
+        alert("RESTART GAME???", "warning");
+        level = 2;
+    }
+
     wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
@@ -265,20 +310,27 @@ const doRestart = () => {
 };
 
 const doStart = () => {
-    drawBlocks();
+    statusBall = false;
+
     if (!start) {
-        alert("GAME START!!!", "info");
+        alert(`NEW GAME!!! LEVEL: ${level-1}`, "info");
     } else {
-        alert(`GAME START!!! WIN: ${gameCountWin} LOSE: ${gameCountLose} `, "info");
+        alert(`LEVEL: ${level-1} `, "info");
     }
     setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
-    start = true;
     interval = setInterval(draw, 10);
     initVariable();
+    start = true;
 };
 
 const goStop = () => {
-    alert("STOP", "warning");
+    fullTimeEnd = new Date();
+    alert("STOP", "dark");
+    document.getElementsByClassName('btn-success')[0].style = "display: none";
+    document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    drawInfo(`Full score: ${fullScore}`, { x: canvas.width / 2 - 40, y: canvas.height / 2 });
+    drawInfo(`Full time: ${(fullTimeEnd-fullTime)/1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
+
 };
 
 ////////////////////-------RUN---------//////////////////////////////////
