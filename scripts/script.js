@@ -48,7 +48,7 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives = 1;
+let lives = 5;
 let level = 2;
 let start = false;
 
@@ -61,6 +61,8 @@ let fullTimeEnd;
 
 let statusGame;
 
+let imageBackgroundColor = document.getElementById("imageBackgroundColor");
+let imageCanvas = canvas.getContext("2d");
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
@@ -154,9 +156,7 @@ function changeColor() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let imageBackgroundColor = document.getElementById("imageBackgroundColor");
-    let x = canvas.getContext("2d");
-    x.drawImage(imageBackgroundColor,0,0);
+    imageCanvas.drawImage(imageBackgroundColor, 0, 0);
     drawBricks();
     drawBall();
     drawPaddle();
@@ -286,7 +286,10 @@ const alert = (message, type) => {
         '</div>'
     }
     alertPlaceholder.append(wrapper);
-    document.getElementsByClassName('alert-info')[0].style = "padding: 100px";
+    document.getElementsByClassName('alertNew')[0].style = "padding: 0px 0px 0px 0px;";
+    document.getElementsByClassName('alert')[0].style = "margin: 0px 0px 0px 0px";
+
+
 
 };
 
@@ -299,15 +302,19 @@ const goOn = () => {
         level = 2;
     }
 
-    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-md-center align-content-md-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
     buttonPlaceholder.append(wrapperBtn);
+    document.getElementsByClassName('btnNew')[0].style = "padding: 0px 0px 0px 0px;";
+
 };
 
 const doRestart = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    document.getElementsByClassName('btnNew')[0].style = "padding: 38px 0px 0px 0px;";
+
     doStart();
 };
 
@@ -316,10 +323,16 @@ const doStart = () => {
 
     if (!start) {
         alert(`NEW GAME!!! LEVEL: ${level - 1}`, "info");
+
     } else {
         alert(`LEVEL: ${level - 1} `, "info");
     }
-    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    setTimeout(() => {
+        document.getElementsByClassName('alert-info')[0].style = "display: none";
+        document.getElementsByClassName('alertNew')[0].style = "padding: 58px 0px 0px 0px;";
+    }, 1000);
+
+
     interval = setInterval(draw, 10);
     initVariable();
     start = true;
@@ -328,16 +341,16 @@ const doStart = () => {
 const goStop = () => {
     fullTimeEnd = new Date();
     alert("STOP", "dark");
+    document.getElementsByClassName('btnNew')[0].style = "padding: 38px 0px 0px 0px;";
+
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+
     drawInfo(`Full score: ${fullScore}`, { x: canvas.width / 2 - 40, y: canvas.height / 2 });
     drawInfo(`Full time: ${(fullTimeEnd - fullTime) / 1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
 
 };
 
 ////////////////////-------RUN---------//////////////////////////////////
-
-
-
 
 doStart();

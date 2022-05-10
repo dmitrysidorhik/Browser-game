@@ -10,7 +10,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Shizuru&display=swap" rel="stylesheet">
-    <img id="imageBackgroundColor"    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Macondo&family=Shizuru&family=Zen+Loop&display=swap"
+        rel="stylesheet">
+    <img id="imageBackgroundColor"
         src="https://images.wallpaperscraft.ru/image/single/tekstura_seryy_volokna_fon_tkan_faktura_50782_1280x720.jpg"
         style="display:none;" />
 </head>
@@ -19,39 +23,43 @@
     <h1> <b> Knocked <i>down</i> bricks</b> </h1>
     <div class="marquee"><b>The development of this game is intended for teaching web development</b></div>
 
-    <!-- <div class="stack">
-        <ul>
-            <li>HTML</li>
-            <li class="awesome">CSS</li>
-            <li>JS</li>
-        </ul>
-        <a href="https://www.prodigygame.com/main-en/blog/best-browser-games/">Best Browser Games</a>
-    </div> -->
 
-    <br>
-    <div class="game">
-           
-        <div class="alert">
-            <div id="liveAlertPlaceholder"></div>
-            <div id="liveButtonPlaceholder"></div>
-        </div>
-        <canvas id="myCanvas" width="480" height="320"></canvas>
+
+    <div class="alertNew">
+        <div id="liveAlertPlaceholder"></div>
     </div>
-   
+
+    <div class="btnNew">
+        <div id="liveButtonPlaceholder"></div>
+    </div>
+
+
+    <div class="game">
+        <canvas id="myCanvas" width="480" height="320"></canvas>
+        <div class="textGame">
+            Game description:
+            When you first start the game, the message <b>"NEW GAME"</b> appears.
+            The player for the entire period of the game is set to <b>5 lives</b>.
+            After knocking down the last brick, there is a transition to the next level with the appearance of the
+            corresponding inscription and the output of the current level. When moving to the next level, the speed of
+            the
+            ball increases, and there is also an increase in the speed of the beater. When all lives are lost, the
+            inscription <b>"GAME OVER"</b> is sent. The player is given a choice: <b>Restart or stop</b>. When you
+            select restart, the
+            initial values ​​​​of the level, speed and lives are established. When you click on the "stop" button, the
+            game
+            stops, as well as the output of information about the total number of knocked down bricks and the total
+            elapsed
+            time.
+        </div>
+
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
     <script src="scripts/script.js"></script>
-
-    <div style="background-color: rgba(255, 99, 71, 0.1);">
-        <p>
-            Lorem ipsum dolor <span style="background-color:lightCyan">sit amet, consectetur adipiscing elit, sed</span>
-            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-    </div>
-
-
 
 </body>
 
