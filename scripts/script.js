@@ -48,7 +48,7 @@ let alertWarningDom = document.querySelector(".alert-warning");
 let buttonSecondaryDom = document.querySelector(".btn-secondary");
 let buttonSuccessDom = document.querySelector(".btn-success");
 
-let lives = 5;
+let lives = 1;
 let level = 2;
 let start = false;
 
@@ -64,9 +64,6 @@ let statusGame;
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
-    if (statusGame === "win") {
-
-    }
     if (statusGame === "lose") {
         lives = 5;
         paddleX = (canvas.width - paddleWidth) / 2;
@@ -93,7 +90,7 @@ const drawBlocks = () => {
 const drawInfo = (message, coord) => {
     const { x, y } = coord;
     ctx.font = '16px Arial';
-    ctx.fillStyle = '155,122,111';
+    ctx.fillStyle = "#eeff00";
     ctx.fillText(message, x, y);
 }
 
@@ -157,6 +154,9 @@ function changeColor() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let imageBackgroundColor = document.getElementById("imageBackgroundColor");
+    let x = canvas.getContext("2d");
+    x.drawImage(imageBackgroundColor,0,0);
     drawBricks();
     drawBall();
     drawPaddle();
@@ -211,7 +211,7 @@ function draw() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = paddleColor;
+    ctx.fillStyle = "#ffd000";
     ctx.fill();
     ctx.closePath();
 }
@@ -286,6 +286,8 @@ const alert = (message, type) => {
         '</div>'
     }
     alertPlaceholder.append(wrapper);
+    document.getElementsByClassName('alert-info')[0].style = "padding: 100px";
+
 };
 
 
@@ -313,9 +315,9 @@ const doStart = () => {
     statusBall = false;
 
     if (!start) {
-        alert(`NEW GAME!!! LEVEL: ${level-1}`, "info");
+        alert(`NEW GAME!!! LEVEL: ${level - 1}`, "info");
     } else {
-        alert(`LEVEL: ${level-1} `, "info");
+        alert(`LEVEL: ${level - 1} `, "info");
     }
     setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
     interval = setInterval(draw, 10);
@@ -329,10 +331,13 @@ const goStop = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
     drawInfo(`Full score: ${fullScore}`, { x: canvas.width / 2 - 40, y: canvas.height / 2 });
-    drawInfo(`Full time: ${(fullTimeEnd-fullTime)/1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
+    drawInfo(`Full time: ${(fullTimeEnd - fullTime) / 1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
 
 };
 
 ////////////////////-------RUN---------//////////////////////////////////
+
+
+
 
 doStart();
