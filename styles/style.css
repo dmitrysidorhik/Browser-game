@@ -1,4 +1,4 @@
-body {
+.container {
     background-color: #a5a9b1;
 }
 
@@ -9,16 +9,17 @@ h1 {
     font-family: 'Shizuru', cursive;
 }
 
-a{
+a {
     text-align: center;
 }
+
 a:hover {
     text-decoration: none;
     background-color: #AFEEEE;
 }
 
 #myCanvas {
-    margin: 0px 230px;    
+    margin: 0px 230px 50px;
 }
 
 .alert {
@@ -43,14 +44,13 @@ a:hover {
     from {
         text-indent: 50%;
     }
-
     to {
         text-indent: 10%;
     }
 }
 
 .game {
-    display: flex; 
+    display: flex;
     margin-top: 10px;
     margin-bottom: 0px;
 }
@@ -59,13 +59,14 @@ a:hover {
     border: 2px solid rgb(70, 24, 24);
     margin: 0px 230px 10px 230px;
 }
+
 .btnNew {
     border: 2px solid rgb(70, 24, 24);
     margin: 0px 230px 0px 230px;
     padding: 38px 0px 0px 0px;
 }
 
-.textGame{
+.textGame {
     color: rgb(38, 0, 255);
     margin-left: -210px;
     margin-right: 240px;
