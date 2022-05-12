@@ -1,6 +1,7 @@
 .container {
     background-color: #a5a9b1;
     height: 100vh;
+    /* height: 100%; */
 }
 
 h1 {

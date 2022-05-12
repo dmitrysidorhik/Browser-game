@@ -250,19 +250,21 @@ const mouseMoveHandler = e => {
     }
 };
 
-const mouseClickHandler = () => {
-    if (!statusBall) {
-        dx = level;
-        dy = -level;
-    }
-    statusBall = true;
-};
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
-document.addEventListener('mousedown', mouseClickHandler, false);
+canvas.addEventListener('click', handlerClickCanvas);
+
+function handlerClickCanvas(e) {
+    if (!statusBall) {
+        dx = level;
+        dy = -level;
+    }
+    statusBall = true;
+
+}
 
 ////////////////////-------OUTPUT---------//////////////////////////////////
 
