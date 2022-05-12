@@ -258,13 +258,11 @@ const mouseClickHandler = () => {
     statusBall = true;
 };
 
-
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
 document.addEventListener('mousedown', mouseClickHandler, false);
-
 
 ////////////////////-------OUTPUT---------//////////////////////////////////
 
@@ -288,11 +286,7 @@ const alert = (message, type) => {
     alertPlaceholder.append(wrapper);
     document.getElementsByClassName('alertNew')[0].style = "padding: 0px 0px 0px 0px;";
     document.getElementsByClassName('alert')[0].style = "margin: 0px 0px 0px 0px";
-
-
-
 };
-
 
 ////////////////////-------START/RESTART---------//////////////////////////////////
 

@@ -1,5 +1,6 @@
 .container {
     background-color: #a5a9b1;
+    height: 100vh;
 }
 
 h1 {
@@ -50,9 +51,9 @@ a:hover {
 }
 
 .game {
-    display: flex;
     margin-top: 10px;
     margin-bottom: 0px;
+    text-align: center;
 }
 
 .alertNew {
@@ -68,8 +69,6 @@ a:hover {
 
 .textGame {
     color: rgb(38, 0, 255);
-    margin-left: -210px;
-    margin-right: 240px;
     text-align: justify;
     font-family: 'Macondo', cursive;
 }
