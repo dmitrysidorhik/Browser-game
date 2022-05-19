@@ -61,12 +61,11 @@ let fullTimeEnd;
 
 let statusGame;
 
+let imageBackgroundColor = document.getElementById("imageBackgroundColor");
+let imageCanvas = canvas.getContext("2d");
 ////////////////////---------------------FUNCTION-----------//////////////////////////////////
 
 const initVariable = () => {
-    if (statusGame === "win") {
-
-    }
     if (statusGame === "lose") {
         lives = 5;
         paddleX = (canvas.width - paddleWidth) / 2;
@@ -93,7 +92,7 @@ const drawBlocks = () => {
 const drawInfo = (message, coord) => {
     const { x, y } = coord;
     ctx.font = '16px Arial';
-    ctx.fillStyle = '155,122,111';
+    ctx.fillStyle = "#eeff00";
     ctx.fillText(message, x, y);
 }
 
@@ -157,6 +156,7 @@ function changeColor() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    imageCanvas.drawImage(imageBackgroundColor, 0, 0);
     drawBricks();
     drawBall();
     drawPaddle();
@@ -211,7 +211,7 @@ function draw() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = paddleColor;
+    ctx.fillStyle = "#ffd000";
     ctx.fill();
     ctx.closePath();
 }
@@ -250,21 +250,21 @@ const mouseMoveHandler = e => {
     }
 };
 
-const mouseClickHandler = () => {
-    if (!statusBall) {
-        dx = level;
-        dy = -level;
-    }
-    statusBall = true;
-};
-
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
-document.addEventListener('mousedown', mouseClickHandler, false);
+canvas.addEventListener('click', handlerClickCanvas);
 
+function handlerClickCanvas(e) {
+    if (!statusBall) {
+        dx = level;
+        dy = -level;
+    }
+    statusBall = true;
+
+}
 
 ////////////////////-------OUTPUT---------//////////////////////////////////
 
@@ -286,8 +286,9 @@ const alert = (message, type) => {
         '</div>'
     }
     alertPlaceholder.append(wrapper);
+    document.getElementsByClassName('alertNew')[0].style = "padding: 0px 0px 0px 0px;";
+    document.getElementsByClassName('alert')[0].style = "margin: 0px 0px 0px 0px";
 };
-
 
 ////////////////////-------START/RESTART---------//////////////////////////////////
 
@@ -297,15 +298,19 @@ const goOn = () => {
         level = 2;
     }
 
-    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-center">' +
+    wrapperBtn.innerHTML = '<div class="d-grid gap-2 d-md-flex justify-content-md-center align-content-md-center">' +
         '<button class="btn btn-success" type="button" onclick="doRestart()">Continue</button>' +
         '<button class="btn btn-secondary" type="button" onclick="goStop()";>Stop</button></div>'
     buttonPlaceholder.append(wrapperBtn);
+    document.getElementsByClassName('btnNew')[0].style = "padding: 0px 0px 0px 0px;";
+
 };
 
 const doRestart = () => {
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+    document.getElementsByClassName('btnNew')[0].style = "padding: 38px 0px 0px 0px;";
+
     doStart();
 };
 
@@ -313,11 +318,17 @@ const doStart = () => {
     statusBall = false;
 
     if (!start) {
-        alert(`NEW GAME!!! LEVEL: ${level-1}`, "info");
+        alert(`NEW GAME!!! LEVEL: ${level - 1}`, "info");
+
     } else {
-        alert(`LEVEL: ${level-1} `, "info");
+        alert(`LEVEL: ${level - 1} `, "info");
     }
-    setTimeout(() => document.getElementsByClassName('alert-info')[0].style = "display: none", 1000);
+    setTimeout(() => {
+        document.getElementsByClassName('alert-info')[0].style = "display: none";
+        document.getElementsByClassName('alertNew')[0].style = "padding: 58px 0px 0px 0px;";
+    }, 1000);
+
+
     interval = setInterval(draw, 10);
     initVariable();
     start = true;
@@ -326,10 +337,13 @@ const doStart = () => {
 const goStop = () => {
     fullTimeEnd = new Date();
     alert("STOP", "dark");
+    document.getElementsByClassName('btnNew')[0].style = "padding: 38px 0px 0px 0px;";
+
     document.getElementsByClassName('btn-success')[0].style = "display: none";
     document.getElementsByClassName('btn-secondary')[0].style = "display: none";
+
     drawInfo(`Full score: ${fullScore}`, { x: canvas.width / 2 - 40, y: canvas.height / 2 });
-    drawInfo(`Full time: ${(fullTimeEnd-fullTime)/1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
+    drawInfo(`Full time: ${(fullTimeEnd - fullTime) / 1000} sec`, { x: canvas.width / 2 - 40, y: canvas.height / 2 + 20 });
 
 };
 

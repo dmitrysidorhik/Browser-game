@@ -1,0 +1,48 @@
+@media screen and (max-width: 1200px) {
+   .container {
+      height: 100%;
+   }
+}
+
+@media screen and (max-width: 1000px) {
+   .game {
+      display: block;
+   }
+
+   #myCanvas {
+      margin-left: 0vw;
+      text-align: center;
+   }
+
+   .alertNew {
+      width: 480px;
+      text-align: center;
+      margin: auto;
+      margin-bottom: 5px;
+   }
+
+   .btnNew {
+      width: 480px;
+      margin: auto;
+   }
+
+   .textGame {
+      margin: auto;
+      width: 480px;
+   }
+
+   @keyframes marquee {
+      from {
+         text-indent: 0%;
+      }
+
+      to {
+         text-indent: 18%;
+      }
+   }
+
+   .marquee {
+      animation: marquee 1s linear infinite alternate;
+      background: #6edbee;
+   }
+}
